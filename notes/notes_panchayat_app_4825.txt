@@ -1,0 +1,40 @@
+1. general.jsx : all posts less than 2 days old will be displayed here. 
+// in reply to a get request, the server will query and retrieve all the posts less than 2
+// days old from the 
+// database and send it in the response. then each post has to be rendered in the frontend 
+// according to the format in posts.jsx and then displayed here in general.jsx
+
+
+4/8/25
+
+2. Most supported posts in Home.jsx
+// on a fetch request get the supportcount of all posts from the mongoose database, then fetch the contents of all the popular posts as a 
+// json object {1:{name:..., content:...}, 2:{name:...}} and return this response. On the client side, render each of these posts in the format 
+// given in posts.jsx and then display in home.jsx
+
+improvement suggestions by chatgpt- 
+
+1. return an array, [{name:..., content:...}, {name:..., content:...}, ] instead of a numbered json object.
+Why: 1.It is a standard practice in REST APIs
+     2. It easily fits with the .map() function
+
+2. Instead of returning the whole mongoose documents, .select() tell mongoose to find and send only the fields we want.
+   .lean() for plain javascript.
+
+Why: 1. reduces the amount of data that has to be transferred.
+
+3. Make thresholds such >, < values configurable, use env variables
+
+Why: 1.Hardcoded values reduces flexibility if there are changes
+
+4. Dont Repeat your code. Make one component defined and reuse it 
+   wherever needed. 
+
+Why: 1. Easier to maintain
+
+5. Use a loading state in the frontend. 
+
+Why: For user experience pov.
+
+6. For queries that you use the most to the db, such as createdAt
+make that the index. 

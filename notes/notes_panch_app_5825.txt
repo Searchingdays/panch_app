@@ -1,0 +1,5 @@
+1. how will our system know if we are running in development or production ?
+
+   The environment variable: NODE_ENV it is set to development by default.
+
+2. A Mongoose schema creates a collection in Mongodb. 
