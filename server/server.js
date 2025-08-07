@@ -1,22 +1,15 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const authroutes = require('./routes/auth')
+const authroutes = require('./routes/auth');
 const Post = require('./schemas/posts'); // your Mongoose Post model
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
-require('dotenv').config(); // Load environment variables from .env file
+require('dotenv').config({path: "../.env"}); // Load environment variables from .env file
 
 const app = express();
 
 app.use(cookieParser());  // cookie parser middleware
-
-
-
-// this should be called after cookie parser has been called by app.use
-const authenticateUser = require('./routes/middleware')
-
-app.use(express.json());
 
 const uri = process.env.MONGO_URI;
 
@@ -25,7 +18,19 @@ mongoose.connect(uri)
  .catch(e => console.log("not connected", e))
 
 
+
+// this should be called after cookie parser has been called by app.use
+const authenticateUser = require('./routes/middleware')
+
+app.use(express.json());
+
 app.use(cors());
+
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.path}`);
+  next();
+});
+
 
 app.get('/api/me', authenticateUser, async (req, res) => {
   const user = req.user; // set in middleware
@@ -55,6 +60,8 @@ app.get('/api/recent-posts', async (req, res) => {
     const recentPosts = await Post.find({ createdAt: { $gte: twoDaysAgo } }).sort({ createdAt: -1 }); // gte means >=, 2 days ago or later and sort on basis of created at in descending order
 
     res.json(recentPosts);
+
+    console.log("recent posts");
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to fetch recent posts' });

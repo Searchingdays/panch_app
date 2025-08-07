@@ -11,11 +11,13 @@ export default function Signup() {
   const handleSignup = async (e) => {
     e.preventDefault();
     const res = await fetch('/api/signup', {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({ name, phone, password }),
       headers: { 'Content-Type': 'application/json' },
     });
+
     const data = await res.json();
+    console.log(data);
 
     try {
 

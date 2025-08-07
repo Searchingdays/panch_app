@@ -10,10 +10,13 @@ const authenticateUser = require('./middleware');
 // Handle Signup request and save the user details
 router.post('/signup', async (req, res) => {
   const { name, phone, password } = req.body;
-  const existingUser = await User.findOne({ phone });
-  if (existingUser) return res.status(400).json({ error: 'Phone already registered' });
+  const existingUser = await User.findOne({ phone:phone });
+  if (existingUser) {
+    return res.status(400).json({ error: 'Phone already registered' });
+  }
 
   const hashed = await bcrypt.hash(password, 10);
+  
   const user = new User({ name, phone, password: hashed });
   await user.save();
 
@@ -22,28 +25,40 @@ router.post('/signup', async (req, res) => {
 
 // Handle Login request and return a token to the user
 router.post('/login', async (req, res) => {
+  console.log(req.body);
   const { name, phone, password } = req.body;
-  const user = await User.findOne({ phone });
+  const user = await User.findOne({ phone: phone });
+  
+ 
 
   try {
   if (!user){
+    
      return res.status(400).json({ error: 'Invalid credentials' });
   }
+  
+  bcrypt.compare(password, user.password)
+   .then((result) => {
+    if(!result){
 
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch){
-     return res.status(400).json({ error: 'Invalid credentials' });
-  }
+      return res.status(400).json({ error: 'Invalid credentials' });
 
-  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
-  res.cookie('token', token, {
+    }
+    else 
+      {
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
+    res.cookie('token', token, {
     httpOnly: true,
-    secure: process.env.NODE,
-    sameSite:'strict',
     maxAge: 2 * 24 * 60 * 60 * 1000,
   });
 
   res.json({message: 'Login success'});
+    }
+
+   })
+ 
+
+
 
 } catch(err) {
 

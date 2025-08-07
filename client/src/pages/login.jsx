@@ -10,29 +10,27 @@ export default function Login({setToken}) {
   const [phone, setphone] = useState();
   const [password, setPassword] = useState('');
 
-  // const handleLogin = async (e) => {
-  //   e.preventDefault();                           // what is e, prevent default ???
-  //   const res = await fetch('/api/login', {
-  //     method: 'POST',
-  //     body: JSON.stringify({ name, phone, password }),
-  //     headers: { 'Content-Type': 'application/json' },
-  //   });
-  //   const data = await res.json();
+  const handleLogin = async (e) => {
+    e.preventDefault();                           // what is e, prevent default ???
+    const res = await fetch('/api/login', {
+      method: "POST",
+      body: JSON.stringify({ name, phone, password }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const data = await res.json();
 
-  //   if (res.ok && data.token) {
+    if (res.ok && data.token) {
 
-  //   setToken(data.token);
-  //   localStorage.setItem('token', data.token);  // not secure in the frontend. use cookies..
-  //   alert("Login success");
-  //   }
-  //   else {
-  //       alert("Login fail");
+    setToken(data.token);
+    localStorage.setItem('token', data.token);  // not secure in the frontend. use cookies..
+    alert("Login success");
+    }
+    else {
+        alert("Login fail");
 
-  //   }
-  //   console.log(data);
-  // };
-
-  const handleLogin = () => {}
+    }
+    console.log(data);
+  };
   
     return (
       <>

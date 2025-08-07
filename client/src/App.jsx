@@ -8,11 +8,11 @@ import UserInfo from './components/userinfo';
 function App() {
  
   return (
-    <Router>
+    <Router basename='/'>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/api/login" element={<Login />} />
-        <Route path='/api/signup' element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path='/signup' element={<Signup />} />
       </Routes>
     </Router>
   );

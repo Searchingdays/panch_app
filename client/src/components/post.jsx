@@ -3,9 +3,6 @@
 // using props get the content from the postform.jsx and the user's name or anonymous from userinfo.jsx
 import React, {useState} from 'react';
 
-
-
-
 export default function Post({content, showname, name, id, timestamp}) {
 
 
